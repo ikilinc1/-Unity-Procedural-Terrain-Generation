@@ -8,6 +8,46 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class CustomTerrain : MonoBehaviour
 {
+
+    public Vector2 randomHeightRange = new Vector2(0, 0.1f);
+    public Terrain terrain;
+    public TerrainData terrainData;
+
+
+    public void ResetTerrain()
+    {
+        float[,] heightMap;
+        heightMap = new float[terrainData.heightmapResolution, terrainData.heightmapResolution];
+        for (int x = 0; x < terrainData.heightmapResolution; x++)
+        {
+            for (int z = 0; z < terrainData.heightmapResolution; z++)
+            {
+                heightMap[x, z] = 0;
+            }
+        }
+        terrainData.SetHeights(0,0,heightMap);
+    }
+    
+    public void RandomTerrain()
+    {
+        float[,] heightMap = terrainData.GetHeights(0, 0, terrainData.heightmapResolution, terrainData.heightmapResolution);
+        for (int x = 0; x < terrainData.heightmapResolution; x++)
+        {
+            for (int z = 0; z < terrainData.heightmapResolution; z++)
+            {
+                heightMap[x, z] += UnityEngine.Random.Range(randomHeightRange.x, randomHeightRange.y);
+            }
+        }
+        terrainData.SetHeights(0,0,heightMap);
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("Initialising Terrain Data");
+        terrain = this.GetComponent<Terrain>();
+        terrainData = Terrain.activeTerrain.terrainData;
+    }
+
     private void Awake()
     {
         SerializedObject tagManager =
