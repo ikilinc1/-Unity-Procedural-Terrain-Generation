@@ -1,1 +1,3 @@
-# -Unity-Procedural-Terrain-Generation
+# -Unity-Procedural-Terrain-Generation  
+
+Editor GUI Table(lite version)  
