@@ -13,16 +13,25 @@ public class CustomTerrainEditor : Editor
     private SerializedProperty randomHeightRange;
     private SerializedProperty heightMapScale;
     private SerializedProperty heightMapImage;
+    private SerializedProperty perlinXScale;
+    private SerializedProperty perlinYScale;
+    private SerializedProperty perlinOffsetX;
+    private SerializedProperty perlinOffsetY;
 
     // fold outs ------------------
     private bool showRandom = false;
     private bool showLoadHeights = false;
+    private bool showPerlinNoice = false;
     
     private void OnEnable()
     {
         randomHeightRange = serializedObject.FindProperty("randomHeightRange");
         heightMapScale = serializedObject.FindProperty("heightMapScale");
         heightMapImage = serializedObject.FindProperty("heightMapImage");
+        perlinXScale = serializedObject.FindProperty("perlinXScale");
+        perlinYScale = serializedObject.FindProperty("perlinYScale");
+        perlinOffsetX = serializedObject.FindProperty("perlinOffsetX");
+        perlinOffsetY = serializedObject.FindProperty("perlinOffsetY");
     }
 
     public override void OnInspectorGUI()
@@ -53,6 +62,21 @@ public class CustomTerrainEditor : Editor
             if (GUILayout.Button("Load Texture"))
             {
                 terrain.LoadTexture();
+            }
+        }
+        
+        showPerlinNoice = EditorGUILayout.Foldout(showPerlinNoice, "Single Perlin Noice");
+        if (showPerlinNoice)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Perlin Noice", EditorStyles.boldLabel);
+            EditorGUILayout.Slider(perlinXScale, 0,1,new GUIContent("X Scale"));
+            EditorGUILayout.Slider(perlinYScale, 0,1,new GUIContent("Y Scale"));
+            EditorGUILayout.IntSlider(perlinOffsetX, 0,10000,new GUIContent("X Offset"));
+            EditorGUILayout.IntSlider(perlinOffsetY, 0,10000,new GUIContent("Y Offset"));
+            if (GUILayout.Button("Perlin"))
+            {
+                terrain.Perlin();
             }
         }
         
