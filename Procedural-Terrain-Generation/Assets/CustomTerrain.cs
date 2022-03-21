@@ -13,7 +13,7 @@ public class CustomTerrain : MonoBehaviour
     public Texture2D heightMapImage;
     public Vector3 heightMapScale = new Vector3(1, 1, 1);
     
-    // Perlin Noice
+    // Perlin Noise
     public float perlinXScale = 0.01f;
     public float perlinYScale = 0.01f;
     public int perlinOffsetX = 0;

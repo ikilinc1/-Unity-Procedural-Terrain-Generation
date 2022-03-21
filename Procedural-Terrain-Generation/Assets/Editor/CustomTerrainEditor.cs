@@ -65,11 +65,11 @@ public class CustomTerrainEditor : Editor
             }
         }
         
-        showPerlinNoice = EditorGUILayout.Foldout(showPerlinNoice, "Single Perlin Noice");
+        showPerlinNoice = EditorGUILayout.Foldout(showPerlinNoice, "Single Perlin Noise");
         if (showPerlinNoice)
         {
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            GUILayout.Label("Perlin Noice", EditorStyles.boldLabel);
+            GUILayout.Label("Perlin Noise", EditorStyles.boldLabel);
             EditorGUILayout.Slider(perlinXScale, 0,1,new GUIContent("X Scale"));
             EditorGUILayout.Slider(perlinYScale, 0,1,new GUIContent("Y Scale"));
             EditorGUILayout.IntSlider(perlinOffsetX, 0,10000,new GUIContent("X Offset"));
