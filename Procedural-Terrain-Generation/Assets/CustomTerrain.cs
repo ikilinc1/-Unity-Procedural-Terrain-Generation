@@ -63,6 +63,9 @@ public class CustomTerrain : MonoBehaviour
     public float MPDMaxHeight = 2f;
     public float MPDDampening = 2.0f;
     public float MPDRoughness = 2.0f;
+    
+    // Smooth
+    public int smoothIteration = 1;
 
 
     public void MidpointDisplacement()
@@ -319,15 +322,55 @@ public class CustomTerrain : MonoBehaviour
 
     public void Smooth()
     {
-        float[,] heightMap = GetHeightMap();
-        for (int y = 0; y < terrainData.heightmapResolution; y++)
+        float[,] heightMap =
+            terrainData.GetHeights(0, 0, terrainData.heightmapResolution, terrainData.heightmapResolution);
+        float smoothProgress = 0;
+        EditorUtility.DisplayProgressBar("Smoothing Terrain", "Progress", smoothProgress);
+        for (int iteration = 0; iteration < smoothIteration; iteration++)
         {
-            for (int x = 0; x < terrainData.heightmapResolution; x++)
+            for (int y = 0; y < terrainData.heightmapResolution; y++)
             {
-                
+                for (int x = 0; x < terrainData.heightmapResolution; x++)
+                {
+                    float avgHeight = heightMap[x, y];
+                    List<Vector2> neighbours = GenerateNeighbours(new Vector2(x, y), terrainData.heightmapResolution,
+                        terrainData.heightmapResolution);
+                    foreach (Vector2 n in neighbours)
+                    {
+                        avgHeight += heightMap[(int) n.x, (int) n.y];
+                    }
+
+                    heightMap[x, y] = avgHeight / ((float) neighbours.Count + 1);
+                }
             }
+
+            smoothProgress++;
+            EditorUtility.DisplayProgressBar("Smoothing Terrain", "Progress", smoothProgress/smoothIteration);
         }
         terrainData.SetHeights(0, 0, heightMap);
+        EditorUtility.ClearProgressBar();   
+    }
+    
+    List<Vector2> GenerateNeighbours(Vector2 pos, int width, int height)
+    {
+        List<Vector2> neighbours = new List<Vector2>();
+        for (int y = -1; y < 2; y++)
+        {
+            for (int x = -1; x < 2; x++)
+            {
+                if (!(x==0 && y==0))
+                {
+                    Vector2 nPos = new Vector2(Mathf.Clamp(pos.x + x, 0, width - 1),
+                        Mathf.Clamp(pos.y + y, 0, height - 1));
+                    if (!neighbours.Contains(nPos))
+                    {
+                        neighbours.Add(nPos);
+                    }
+                }
+            }
+        }
+
+        return neighbours;
     }
     
     private void OnEnable()

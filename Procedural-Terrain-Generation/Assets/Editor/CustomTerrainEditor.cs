@@ -31,6 +31,7 @@ public class CustomTerrainEditor : Editor
     private SerializedProperty MPDMaxHeight;
     private SerializedProperty MPDDampening;
     private SerializedProperty MPDRoughness;
+    private SerializedProperty smoothIteration;
 
     private GUITableState perlinParameterTable;
     private SerializedProperty perlinParameters;
@@ -42,6 +43,7 @@ public class CustomTerrainEditor : Editor
     private bool showMultiplePerlin = false;
     private bool showVoronoi = false;
     private bool showMPD = false;
+    private bool showSmooth = false;
 
     private void OnEnable()
     {
@@ -66,6 +68,7 @@ public class CustomTerrainEditor : Editor
         MPDMaxHeight = serializedObject.FindProperty("MPDMaxHeight");
         MPDDampening = serializedObject.FindProperty("MPDDampening");
         MPDRoughness = serializedObject.FindProperty("MPDRoughness");
+        smoothIteration = serializedObject.FindProperty("smoothIteration");
         perlinParameterTable = new GUITableState("perlinParameters");
         perlinParameters = serializedObject.FindProperty("perlinParameters");
     }
@@ -177,6 +180,19 @@ public class CustomTerrainEditor : Editor
         }
         //GUILayout.Space(20);
         
+        showSmooth = EditorGUILayout.Foldout(showSmooth, "Smooth Terrain");
+        if (showSmooth)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Smooth Terrain", EditorStyles.boldLabel);
+            EditorGUILayout.IntSlider(smoothIteration, 1, 20, new GUIContent("Smooth Iteration"));
+            if (GUILayout.Button("Smooth Terrain"))
+            {
+                terrain.Smooth();
+            }
+        }
+
+
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         if (GUILayout.Button("Reset Terrain"))
         {
