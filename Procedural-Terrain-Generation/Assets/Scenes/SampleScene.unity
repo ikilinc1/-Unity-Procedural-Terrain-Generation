@@ -435,7 +435,7 @@ MonoBehaviour:
   perlinOffsetY: 8197
   perlinOctaves: 8
   perlinPersistence: 2.61
-  perlinHeightScale: 0.554
+  perlinHeightScale: 0.084
   perlinParameters:
   - mPerlinXScale: 0.01
     mPerlinYScale: 0.01
@@ -455,8 +455,8 @@ MonoBehaviour:
     remove: 0
   voronoiFalloff: 10
   voronoiDropoff: 10
-  voronoiMinHeight: 0.129
-  voronoiMaxHeight: 0.479
+  voronoiMinHeight: 0.507
+  voronoiMaxHeight: 0.743
   voronoiPeaks: 5
   voronoiType: 3
   terrain: {fileID: 1390164013}
