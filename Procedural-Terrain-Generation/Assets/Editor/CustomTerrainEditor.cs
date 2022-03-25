@@ -35,6 +35,9 @@ public class CustomTerrainEditor : Editor
 
     private GUITableState perlinParameterTable;
     private SerializedProperty perlinParameters;
+    
+    private GUITableState splatMapTable;
+    private SerializedProperty splatHeights;
 
     // fold outs ------------------
     private bool showRandom = false;
@@ -44,6 +47,7 @@ public class CustomTerrainEditor : Editor
     private bool showVoronoi = false;
     private bool showMPD = false;
     private bool showSmooth = false;
+    private bool showSplatMaps = false;
 
     private void OnEnable()
     {
@@ -71,6 +75,8 @@ public class CustomTerrainEditor : Editor
         smoothIteration = serializedObject.FindProperty("smoothIteration");
         perlinParameterTable = new GUITableState("perlinParameters");
         perlinParameters = serializedObject.FindProperty("perlinParameters");
+        splatMapTable = new GUITableState("splatHeights");
+        splatHeights = serializedObject.FindProperty("splatHeights");
     }
 
     public override void OnInspectorGUI()
@@ -178,7 +184,30 @@ public class CustomTerrainEditor : Editor
                 terrain.MidpointDisplacement();
             }
         }
-        //GUILayout.Space(20);
+
+        showSplatMaps = EditorGUILayout.Foldout(showSplatMaps, "Splat Maps");
+        if (showSplatMaps)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Splat Maps", EditorStyles.boldLabel);
+            splatMapTable =
+                GUITableLayout.DrawTable(splatMapTable, splatHeights);
+            GUILayout.Space(20);
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("+"))
+            {
+                terrain.AddNewSplatHeight();
+            }
+            if (GUILayout.Button("-"))
+            {
+                terrain.RemoveSplatHeight();
+            }
+            EditorGUILayout.EndHorizontal();
+            if (GUILayout.Button("Apply Splat Maps"))
+            {
+                terrain.SplatMaps();
+            }
+        }
         
         showSmooth = EditorGUILayout.Foldout(showSmooth, "Smooth Terrain");
         if (showSmooth)
