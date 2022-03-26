@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 using EditorGUITable;
@@ -9,6 +10,8 @@ using EditorGUITable;
 [CanEditMultipleObjects]
 public class CustomTerrainEditor : Editor
 {
+    private Texture2D hmTexture;
+    
     // properties -----------------
     private SerializedProperty randomHeightRange;
     private SerializedProperty heightMapScale;
@@ -48,6 +51,7 @@ public class CustomTerrainEditor : Editor
     private bool showMPD = false;
     private bool showSmooth = false;
     private bool showSplatMaps = false;
+    private bool showHeights = false;
 
     private void OnEnable()
     {
@@ -77,6 +81,8 @@ public class CustomTerrainEditor : Editor
         perlinParameters = serializedObject.FindProperty("perlinParameters");
         splatMapTable = new GUITableState("splatHeights");
         splatHeights = serializedObject.FindProperty("splatHeights");
+
+        hmTexture = new Texture2D(513, 513, TextureFormat.ARGB32, false);
     }
 
     private Vector2 scrollPos;
@@ -234,6 +240,38 @@ public class CustomTerrainEditor : Editor
             terrain.ResetTerrain();
         }
         
+        
+        showHeights = EditorGUILayout.Foldout(showHeights, "Height Map");
+        if (showHeights)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            int hmtSize = (int) (EditorGUIUtility.currentViewWidth - 100);
+            GUILayout.Label(hmTexture, GUILayout.Width(hmtSize), GUILayout.Height(hmtSize));
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Refresh", GUILayout.Width(hmtSize)))
+            {
+                float[,] heightMap = terrain.terrainData.GetHeights(0, 0, terrain.terrainData.heightmapResolution,
+                    terrain.terrainData.heightmapResolution);
+                for (int y = 0; y < terrain.terrainData.heightmapResolution; y++)
+                {
+                    for (int x = 0; x < terrain.terrainData.heightmapResolution; x++)
+                    {
+                        hmTexture.SetPixel(x, y, new Color(heightMap[x, y], heightMap[x, y], heightMap[x, y], 1));
+                    }
+                }
+
+                hmTexture.Apply();
+            }
+            if (GUILayout.Button("Save", GUILayout.Width(hmtSize)))
+            {
+                byte[] bytes = hmTexture.EncodeToPNG();
+                System.IO.Directory.CreateDirectory(Application.dataPath + "/SavedTextures");
+                File.WriteAllBytes(Application.dataPath + "/SavedTextures/exportedHeightMap.png", bytes);
+            }
+        }
 
 
         EditorGUILayout.EndScrollView();
