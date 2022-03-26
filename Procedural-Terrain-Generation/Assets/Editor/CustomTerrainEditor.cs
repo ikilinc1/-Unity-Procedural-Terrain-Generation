@@ -10,6 +10,8 @@ using EditorGUITable;
 [CanEditMultipleObjects]
 public class CustomTerrainEditor : Editor
 {
+    private CustomTerrain terrain;
+    
     private Texture2D hmTexture;
     
     // properties -----------------
@@ -82,7 +84,9 @@ public class CustomTerrainEditor : Editor
         splatMapTable = new GUITableState("splatHeights");
         splatHeights = serializedObject.FindProperty("splatHeights");
 
-        hmTexture = new Texture2D(513, 513, TextureFormat.ARGB32, false);
+        
+        terrain = (CustomTerrain) target;
+        hmTexture = new Texture2D(terrain.terrainData.heightmapResolution, terrain.terrainData.heightmapResolution, TextureFormat.ARGB32, false);
     }
 
     private Vector2 scrollPos;
@@ -90,7 +94,7 @@ public class CustomTerrainEditor : Editor
     {
         serializedObject.Update();
 
-        CustomTerrain terrain = (CustomTerrain) target;
+        terrain = (CustomTerrain) target;
 
         Rect r = EditorGUILayout.BeginVertical();
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(r.width), GUILayout.Height(r.height));
