@@ -462,14 +462,16 @@ MonoBehaviour:
   terrain: {fileID: 1390164013}
   terrainData: {fileID: 15600000, guid: 214f5190294a3d24a8fefee29e1ca1ba, type: 2}
   MPDMinHeight: -5
-  MPDMaxHeight: 2
+  MPDMaxHeight: 4
   MPDDampening: 2
   MPDRoughness: 2
-  smoothIteration: 4
+  smoothIteration: 20
   splatHeights:
   - texture: {fileID: 2800000, guid: cf232666bd1f04c1a8a5a7f71eb60617, type: 3}
     minHeight: 0
     maxHeight: 0.1
+    minSlope: 0
+    maxSlope: 1
     tileOffset: {x: 0, y: 0}
     tileSize: {x: 50, y: 50}
     splatOffset: 0.1
@@ -478,8 +480,10 @@ MonoBehaviour:
     splatNoiseScaler: 0.1
     remove: 0
   - texture: {fileID: 2800000, guid: 858e483d613d848cb935156b41553e4d, type: 3}
-    minHeight: 0.2
+    minHeight: 0
     maxHeight: 0.4
+    minSlope: 45
+    maxSlope: 90
     tileOffset: {x: 0, y: 0}
     tileSize: {x: 50, y: 50}
     splatOffset: 0.1
@@ -490,6 +494,8 @@ MonoBehaviour:
   - texture: {fileID: 2800000, guid: 79d5431cd68194d08a40d2bbe4ebcef9, type: 3}
     minHeight: 0.4
     maxHeight: 0.6
+    minSlope: 0
+    maxSlope: 1
     tileOffset: {x: 0, y: 0}
     tileSize: {x: 50, y: 50}
     splatOffset: 0.1
