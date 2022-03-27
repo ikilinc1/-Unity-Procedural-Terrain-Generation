@@ -479,6 +479,21 @@ MonoBehaviour:
     splatNoiseYScale: 0.01
     splatNoiseScaler: 0.1
     remove: 0
+  vegetation:
+  - mesh: {fileID: -927199367670048503, guid: 8c7d35afbd119bca11002b7b44295342, type: 3}
+    minHeight: 0
+    maxHeight: 0.4
+    minSlope: 0
+    maxSlope: 90
+    remove: 0
+  - mesh: {fileID: -927199367670048503, guid: 7b9282fc41cfa4caf9b150bd407f856e, type: 3}
+    minHeight: 0.4
+    maxHeight: 1
+    minSlope: 0
+    maxSlope: 90
+    remove: 0
+  maxTrees: 5000
+  distanceTrees: 18
 --- !u!154 &1390164012
 TerrainCollider:
   m_ObjectHideFlags: 0

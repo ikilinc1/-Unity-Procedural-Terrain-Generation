@@ -37,12 +37,17 @@ public class CustomTerrainEditor : Editor
     private SerializedProperty MPDDampening;
     private SerializedProperty MPDRoughness;
     private SerializedProperty smoothIteration;
+    private SerializedProperty maxTrees;
+    private SerializedProperty distanceTrees;
 
     private GUITableState perlinParameterTable;
     private SerializedProperty perlinParameters;
     
     private GUITableState splatMapTable;
     private SerializedProperty splatHeights;
+    
+    private GUITableState vegetationTable;
+    private SerializedProperty vegetationData;
 
     // fold outs ------------------
     private bool showRandom = false;
@@ -54,6 +59,7 @@ public class CustomTerrainEditor : Editor
     private bool showSmooth = false;
     private bool showSplatMaps = false;
     private bool showHeights = false;
+    private bool showVegetation = false;
 
     private void OnEnable()
     {
@@ -79,10 +85,14 @@ public class CustomTerrainEditor : Editor
         MPDDampening = serializedObject.FindProperty("MPDDampening");
         MPDRoughness = serializedObject.FindProperty("MPDRoughness");
         smoothIteration = serializedObject.FindProperty("smoothIteration");
+        maxTrees = serializedObject.FindProperty("maxTrees");
+        distanceTrees = serializedObject.FindProperty("distanceTrees");
         perlinParameterTable = new GUITableState("perlinParameters");
         perlinParameters = serializedObject.FindProperty("perlinParameters");
         splatMapTable = new GUITableState("splatHeights");
         splatHeights = serializedObject.FindProperty("splatHeights");
+        vegetationTable = new GUITableState("vegetation");
+        vegetationData = serializedObject.FindProperty("vegetation");
 
         
         terrain = (CustomTerrain) target;
@@ -222,6 +232,32 @@ public class CustomTerrainEditor : Editor
             if (GUILayout.Button("Apply Splat Maps"))
             {
                 terrain.SplatMaps();
+            }
+        }
+        
+        showVegetation = EditorGUILayout.Foldout(showVegetation, "Vegetation");
+        if (showVegetation)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Vegetation", EditorStyles.boldLabel);
+            EditorGUILayout.IntSlider(maxTrees, 0,10000,new GUIContent("Maximum Tree Count"));
+            EditorGUILayout.IntSlider(distanceTrees, 2,20,new GUIContent("Tree Spacing"));
+            splatMapTable =
+                GUITableLayout.DrawTable(vegetationTable, vegetationData);
+            GUILayout.Space(20);
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("+"))
+            {
+                terrain.AddVegetationData();
+            }
+            if (GUILayout.Button("-"))
+            {
+                terrain.RemoveVegetationData();
+            }
+            EditorGUILayout.EndHorizontal();
+            if (GUILayout.Button("Apply Vegetation"))
+            {
+                terrain.PlantVegetation();
             }
         }
 

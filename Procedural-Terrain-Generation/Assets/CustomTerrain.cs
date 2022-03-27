@@ -89,7 +89,26 @@ public class CustomTerrain : MonoBehaviour
     {
         new SplatHeights()
     };
+    
+    // Vegetation
+    [System.Serializable]
+    public class Vegetation
+    {
+        public GameObject mesh = null;
+        public float minHeight = 0.1f;
+        public float maxHeight = 0.2f;
+        public float minSlope = 0;
+        public float maxSlope = 90;
+        public bool remove = false;
+    }
 
+    public List<Vegetation> vegetation = new List<Vegetation>()
+    {
+        new Vegetation()
+    };
+
+    public int maxTrees = 5000;
+    public int distanceTrees = 5;
     
         
     public void MidpointDisplacement()
@@ -368,31 +387,6 @@ public class CustomTerrain : MonoBehaviour
         splatHeights = keptSplatHeights;
     }
 
-    float GetSteepness(float[,] heightmap, int x, int y, int width, int height)
-    {
-        float h = heightmap[x, y];
-        int nx = x + 1;
-        int ny = y + 1;
-
-        if (nx > width - 1)
-        {
-            nx = x - 1;
-        }
-
-        if (ny > height - 1)
-        {
-            ny = y - 1;
-        }
-
-        float dx = heightmap[nx, y] - h;
-        float dy = heightmap[x, ny] - h;
-        Vector2 gradient = new Vector2(dx, dy);
-
-        float steep = gradient.magnitude;
-
-        return steep;
-    }
-    
     public void SplatMaps()
     {
         TerrainLayer[] newSplatPrototypes;
@@ -449,6 +443,81 @@ public class CustomTerrain : MonoBehaviour
         }
         terrainData.SetAlphamaps(0,0,splatmapData);
     }
+
+    public void AddVegetationData()
+    {
+        vegetation.Add(new Vegetation());
+    }
+
+    public void RemoveVegetationData()
+    {
+        List<Vegetation> keptTreeData = new List<Vegetation>();
+        for (int i = 0; i < vegetation.Count; i++)
+        {
+            if (!vegetation[i].remove)
+            {
+                keptTreeData.Add(vegetation[i]);
+            }
+        }
+
+        if (keptTreeData.Count == 0)
+        {
+            keptTreeData.Add(vegetation[0]);
+        }
+
+        vegetation = keptTreeData;
+    }
+
+    public void PlantVegetation()
+    {
+        TreePrototype[] newTreePrototypes;
+        newTreePrototypes = new TreePrototype[vegetation.Count];
+        int tindex = 0;
+        foreach (Vegetation t in vegetation)
+        {
+            newTreePrototypes[tindex] = new TreePrototype();
+            newTreePrototypes[tindex].prefab = t.mesh;
+            tindex++;
+        }
+
+        terrainData.treePrototypes = newTreePrototypes;
+
+        List<TreeInstance> allVegetation = new List<TreeInstance>();
+        for (int z = 0; z < terrainData.size.z; z+=distanceTrees)
+        {
+            for (int x = 0; x < terrainData.size.x; x+=distanceTrees)
+            {
+                for (int tp = 0; tp < terrainData.treePrototypes.Length; tp++)
+                {
+                    float thisHeight = terrainData.GetHeight(x, z) / terrainData.size.y;
+                    float thisHeightStart = vegetation[tp].minHeight;
+                    float thisHeightEnd = vegetation[tp].maxHeight;
+
+                    if (thisHeight >= thisHeightStart && thisHeight <= thisHeightEnd)
+                    {
+                        TreeInstance instance = new TreeInstance();
+                        instance.position = new Vector3((x + UnityEngine.Random.Range(-5.0f, 5.0f)) / 
+                                                        terrainData.size.x, thisHeight, 
+                            (z + UnityEngine.Random.Range(-5.0f, 5.0f)) / terrainData.size.z);
+                        instance.rotation = UnityEngine.Random.Range(0, 360);
+                        instance.prototypeIndex = tp;
+                        instance.color = Color.white;
+                        instance.lightmapColor = Color.white;
+                        instance.heightScale = 0.95f;
+                        instance.widthScale = 0.95f;
+                    
+                        allVegetation.Add(instance);
+                        if (allVegetation.Count >= maxTrees)
+                        {
+                            goto TREESDONE;
+                        }
+                    }
+                }
+            }
+        }
+        TREESDONE:
+            terrainData.treeInstances = allVegetation.ToArray();
+    }
     
     public void Smooth()
     {
@@ -501,6 +570,31 @@ public class CustomTerrain : MonoBehaviour
         }
 
         return neighbours;
+    }
+    
+    float GetSteepness(float[,] heightmap, int x, int y, int width, int height)
+    {
+        float h = heightmap[x, y];
+        int nx = x + 1;
+        int ny = y + 1;
+
+        if (nx > width - 1)
+        {
+            nx = x - 1;
+        }
+
+        if (ny > height - 1)
+        {
+            ny = y - 1;
+        }
+
+        float dx = heightmap[nx, y] - h;
+        float dy = heightmap[x, ny] - h;
+        Vector2 gradient = new Vector2(dx, dy);
+
+        float steep = gradient.magnitude;
+
+        return steep;
     }
 
     void NormalizeVector(float[] v)
