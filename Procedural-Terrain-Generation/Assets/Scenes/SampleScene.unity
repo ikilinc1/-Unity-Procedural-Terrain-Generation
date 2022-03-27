@@ -488,6 +488,39 @@ MonoBehaviour:
     remove: 0
   maxTrees: 9980
   distanceTrees: 14
+  details:
+  - prototype: {fileID: -927199367670048503, guid: 8e41f14c6552d48e6a7992aaecc808e4, type: 3}
+    prototypeTexture: {fileID: 0}
+    minHeight: 0
+    maxHeight: 0.5
+    minSlope: 0
+    maxSlope: 30
+    healthyColor: {r: 1, g: 1, b: 1, a: 1}
+    dryColor: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
+    heightRange: {x: 1, y: 5}
+    widthRange: {x: 1, y: 5}
+    noiseSpread: 0.5
+    overlap: 0.01
+    feather: 0.05
+    density: 0.5
+    remove: 0
+  - prototype: {fileID: 0}
+    prototypeTexture: {fileID: 2800000, guid: ba0dbc11bd11158b1100de1b44295342, type: 3}
+    minHeight: 0.1
+    maxHeight: 0.5
+    minSlope: 0
+    maxSlope: 70
+    healthyColor: {r: 0.8980392, g: 0, b: 0.5150912, a: 1}
+    dryColor: {r: 0.5849056, g: 0.5656341, b: 0.024830889, a: 1}
+    heightRange: {x: 1, y: 5}
+    widthRange: {x: 1, y: 5}
+    noiseSpread: 0.5
+    overlap: 0.01
+    feather: 0.05
+    density: 1
+    remove: 0
+  maxDetails: 10000
+  distanceDetail: 2
   terrainLayer: 9
 --- !u!154 &1390164012
 TerrainCollider:
@@ -514,7 +547,7 @@ Terrain:
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 80
+  m_DetailObjectDistance: 10000
   m_DetailObjectDensity: 1
   m_HeightmapPixelError: 5
   m_SplatMapDistance: 1000

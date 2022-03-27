@@ -39,6 +39,8 @@ public class CustomTerrainEditor : Editor
     private SerializedProperty smoothIteration;
     private SerializedProperty maxTrees;
     private SerializedProperty distanceTrees;
+    private SerializedProperty maxDetails;
+    private SerializedProperty distanceDetail;
 
     private GUITableState perlinParameterTable;
     private SerializedProperty perlinParameters;
@@ -48,6 +50,9 @@ public class CustomTerrainEditor : Editor
     
     private GUITableState vegetationTable;
     private SerializedProperty vegetationData;
+
+    private GUITableState detailsTable;
+    private SerializedProperty details;
 
     // fold outs ------------------
     private bool showRandom = false;
@@ -60,6 +65,7 @@ public class CustomTerrainEditor : Editor
     private bool showSplatMaps = false;
     private bool showHeights = false;
     private bool showVegetation = false;
+    private bool showDetails = false;
 
     private void OnEnable()
     {
@@ -87,12 +93,16 @@ public class CustomTerrainEditor : Editor
         smoothIteration = serializedObject.FindProperty("smoothIteration");
         maxTrees = serializedObject.FindProperty("maxTrees");
         distanceTrees = serializedObject.FindProperty("distanceTrees");
+        maxDetails = serializedObject.FindProperty("maxDetails");
+        distanceDetail = serializedObject.FindProperty("distanceDetail");
         perlinParameterTable = new GUITableState("perlinParameters");
         perlinParameters = serializedObject.FindProperty("perlinParameters");
         splatMapTable = new GUITableState("splatHeights");
         splatHeights = serializedObject.FindProperty("splatHeights");
         vegetationTable = new GUITableState("vegetation");
         vegetationData = serializedObject.FindProperty("vegetation");
+        detailsTable = new GUITableState("details");
+        details = serializedObject.FindProperty("details");
 
         
         terrain = (CustomTerrain) target;
@@ -242,7 +252,7 @@ public class CustomTerrainEditor : Editor
             GUILayout.Label("Vegetation", EditorStyles.boldLabel);
             EditorGUILayout.IntSlider(maxTrees, 0,10000,new GUIContent("Maximum Tree Count"));
             EditorGUILayout.IntSlider(distanceTrees, 2,20,new GUIContent("Tree Spacing"));
-            splatMapTable =
+            vegetationTable =
                 GUITableLayout.DrawTable(vegetationTable, vegetationData);
             GUILayout.Space(20);
             EditorGUILayout.BeginHorizontal();
@@ -260,6 +270,34 @@ public class CustomTerrainEditor : Editor
                 terrain.PlantVegetation();
             }
         }
+        
+        showDetails = EditorGUILayout.Foldout(showDetails, "Details");
+        if (showDetails)
+        {
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            GUILayout.Label("Details", EditorStyles.boldLabel);
+            EditorGUILayout.IntSlider(maxDetails, 0,10000,new GUIContent("Maximum Detail Count"));
+            EditorGUILayout.IntSlider(distanceDetail, 2,20,new GUIContent("Detail Spacing"));
+            detailsTable =
+                GUITableLayout.DrawTable(detailsTable, details);
+
+            terrain.GetComponent<Terrain>().detailObjectDistance = maxDetails.intValue;
+            GUILayout.Space(20);
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("+"))
+            {
+                terrain.AddNewDetails();
+            }
+            if (GUILayout.Button("-"))
+            {
+                terrain.RemoveDetails();
+            }
+            EditorGUILayout.EndHorizontal();
+            if (GUILayout.Button("Apply Details"))
+            {
+                terrain.AddDetails();
+            }
+        }
 
         showSmooth = EditorGUILayout.Foldout(showSmooth, "Smooth Terrain");
         if (showSmooth)
@@ -272,7 +310,6 @@ public class CustomTerrainEditor : Editor
                 terrain.Smooth();
             }
         }
-
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         if (GUILayout.Button("Reset Terrain"))
