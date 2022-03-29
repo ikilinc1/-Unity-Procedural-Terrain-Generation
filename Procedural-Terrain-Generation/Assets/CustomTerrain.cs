@@ -146,6 +146,10 @@ public class CustomTerrain : MonoBehaviour
 
     public int maxDetails = 5000;
     public int distanceDetail = 5;
+    
+    // Water
+    public float waterHeight = 0.5f;
+    public GameObject waterGO;
 
     public void MidpointDisplacement()
     {
@@ -671,6 +675,20 @@ public class CustomTerrain : MonoBehaviour
             }
             terrainData.SetDetailLayer(0,0,i,detailMap);
         }
+    }
+
+    public void AddWater()
+    {
+        GameObject water = GameObject.Find("water");
+        if (!water)
+        {
+            water = Instantiate(waterGO, this.transform.position, this.transform.rotation);
+            water.name = "water";
+        }
+
+        water.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2,
+            waterHeight * terrainData.size.y, terrainData.size.z / 2);
+        water.transform.localScale = new Vector3(terrainData.size.x, 1, terrainData.size.z);
     }
     
     public void Smooth()

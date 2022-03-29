@@ -473,7 +473,7 @@ MonoBehaviour:
     remove: 0
   vegetation:
   - mesh: {fileID: -927199367670048503, guid: 8c7d35afbd119bca11002b7b44295342, type: 3}
-    minHeight: 0
+    minHeight: 0.4
     maxHeight: 0.5
     minSlope: 0
     maxSlope: 30
@@ -500,7 +500,7 @@ MonoBehaviour:
     heightRange: {x: 1, y: 5}
     widthRange: {x: 1, y: 5}
     noiseSpread: 0.5
-    overlap: 0.01
+    overlap: 0.011
     feather: 0.05
     density: 0.5
     remove: 0
@@ -515,12 +515,14 @@ MonoBehaviour:
     heightRange: {x: 1, y: 5}
     widthRange: {x: 1, y: 5}
     noiseSpread: 0.5
-    overlap: 0.01
+    overlap: 0.05
     feather: 0.05
     density: 1
     remove: 0
   maxDetails: 10000
   distanceDetail: 2
+  waterHeight: 0.4
+  waterGO: {fileID: 100000, guid: 780611a67e8e941a2b3aa96e5915a793, type: 3}
   terrainLayer: 9
 --- !u!154 &1390164012
 TerrainCollider:
