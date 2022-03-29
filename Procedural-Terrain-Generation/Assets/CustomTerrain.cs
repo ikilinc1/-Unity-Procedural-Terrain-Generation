@@ -150,6 +150,7 @@ public class CustomTerrain : MonoBehaviour
     // Water
     public float waterHeight = 0.5f;
     public GameObject waterGO;
+    public Material shoreLineMaterial;
 
     public void MidpointDisplacement()
     {
@@ -689,6 +690,87 @@ public class CustomTerrain : MonoBehaviour
         water.transform.position = this.transform.position + new Vector3(terrainData.size.x / 2,
             waterHeight * terrainData.size.y, terrainData.size.z / 2);
         water.transform.localScale = new Vector3(terrainData.size.x, 1, terrainData.size.z);
+    }
+
+    public void DrawShoreLine()
+    {
+        float[,] heightMap =
+            terrainData.GetHeights(0, 0, terrainData.heightmapResolution, terrainData.heightmapResolution);
+
+        for (int y = 0; y < terrainData.heightmapResolution; y++)
+        {
+            for (int x = 0; x < terrainData.heightmapResolution; x++)
+            {
+                // find spot on shore
+                Vector2 thisLocation = new Vector2(x, y);
+                List<Vector2> neighbours = GenerateNeighbours(thisLocation, terrainData.heightmapResolution,
+                    terrainData.heightmapResolution);
+
+                foreach (Vector2 n in neighbours)
+                {
+                    if (heightMap[x,y] < waterHeight && heightMap[(int)n.x,(int)n.y] > waterHeight)
+                    {
+                        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                        go.transform.localScale *= 10.0f;
+
+                        go.transform.position = this.transform.position +
+                                                new Vector3(
+                                                    y / (float) terrainData.heightmapResolution *
+                                                    terrainData.size.z, waterHeight * terrainData.size.y,
+                                                    x / (float) terrainData.heightmapResolution *
+                                                    terrainData.size.x);
+
+                        go.transform.LookAt(new Vector3(
+                            n.y / (float) terrainData.heightmapResolution * terrainData.size.z,
+                            waterHeight * terrainData.size.y,
+                            n.x / (float) terrainData.heightmapResolution * terrainData.size.x));
+                        
+                        go.transform.Rotate(90,0,0);
+                        go.tag = "Shore";
+                    }
+                }
+            }
+        }
+
+        GameObject[] shoreQuads = GameObject.FindGameObjectsWithTag("Shore");
+        MeshFilter[] meshFilters = new MeshFilter[shoreQuads.Length];
+        for (int m = 0; m < shoreQuads.Length; m++)
+        {
+            meshFilters[m] = shoreQuads[m].GetComponent<MeshFilter>();
+        }
+
+        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+        int i = 0;
+        while (i<meshFilters.Length)
+        {
+            combine[i].mesh = meshFilters[i].sharedMesh;
+            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            meshFilters[i].gameObject.SetActive(false);
+            i++;
+        }
+        
+        GameObject currentShoreLine = GameObject.Find("Shoreline");
+        if (currentShoreLine)
+        {
+            DestroyImmediate(currentShoreLine);
+        }
+
+        GameObject shoreLine = new GameObject();
+        shoreLine.name = "ShoreLine";
+        shoreLine.AddComponent<WaveAnimation>();
+        shoreLine.transform.position = this.transform.position;
+        shoreLine.transform.rotation = this.transform.rotation;
+        MeshFilter thisMF = shoreLine.AddComponent<MeshFilter>();
+        thisMF.mesh = new Mesh();
+        shoreLine.GetComponent<MeshFilter>().sharedMesh.CombineMeshes(combine);
+
+        MeshRenderer r = shoreLine.AddComponent<MeshRenderer>();
+        r.sharedMaterial = shoreLineMaterial;
+
+        for (int sQ = 0; sQ < shoreQuads.Length; sQ++)
+        {
+            DestroyImmediate(shoreQuads[sQ]);
+        }
     }
     
     public void Smooth()

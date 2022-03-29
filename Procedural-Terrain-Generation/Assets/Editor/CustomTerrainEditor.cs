@@ -43,6 +43,7 @@ public class CustomTerrainEditor : Editor
     private SerializedProperty distanceDetail;
     private SerializedProperty waterHeight;
     private SerializedProperty waterGO;
+    private SerializedProperty shoreLineMaterial;
 
     private GUITableState perlinParameterTable;
     private SerializedProperty perlinParameters;
@@ -100,6 +101,7 @@ public class CustomTerrainEditor : Editor
         distanceDetail = serializedObject.FindProperty("distanceDetail");
         waterHeight = serializedObject.FindProperty("waterHeight");
         waterGO = serializedObject.FindProperty("waterGO");
+        shoreLineMaterial = serializedObject.FindProperty("shoreLineMaterial");
         perlinParameterTable = new GUITableState("perlinParameters");
         perlinParameters = serializedObject.FindProperty("perlinParameters");
         splatMapTable = new GUITableState("splatHeights");
@@ -316,7 +318,13 @@ public class CustomTerrainEditor : Editor
             {
                 terrain.AddWater();
             }
-          
+
+            EditorGUILayout.PropertyField(shoreLineMaterial);
+            if (GUILayout.Button("Add Shoreline"))
+            {
+                terrain.DrawShoreLine();
+            }
+
         }
 
         showSmooth = EditorGUILayout.Foldout(showSmooth, "Smooth Terrain");
