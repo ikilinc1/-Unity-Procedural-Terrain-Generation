@@ -50,6 +50,7 @@ public class CustomTerrainEditor : Editor
     private SerializedProperty solubility;
     private SerializedProperty droplets;
     private SerializedProperty erosionSmoothAmount;
+    private SerializedProperty erosionAmount;
 
     private GUITableState perlinParameterTable;
     private SerializedProperty perlinParameters;
@@ -114,6 +115,7 @@ public class CustomTerrainEditor : Editor
         solubility = serializedObject.FindProperty("solubility");
         droplets = serializedObject.FindProperty("droplets");
         erosionSmoothAmount = serializedObject.FindProperty("erosionSmoothAmount");
+        erosionAmount = serializedObject.FindProperty("erosionAmount");
         perlinParameterTable = new GUITableState("perlinParameters");
         perlinParameters = serializedObject.FindProperty("perlinParameters");
         splatMapTable = new GUITableState("splatHeights");
@@ -345,6 +347,7 @@ public class CustomTerrainEditor : Editor
             GUILayout.Label("Erosion", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(erosionType);
             EditorGUILayout.Slider(erosionStrength, 0, 1, new GUIContent("Erosion Strength"));
+            EditorGUILayout.Slider(erosionAmount, 0, 1, new GUIContent("Erosion Amount"));
             EditorGUILayout.IntSlider(droplets, 0, 500, new GUIContent("Droplets"));
             EditorGUILayout.Slider(solubility, 0.001f, 1, new GUIContent("Solubility"));
             EditorGUILayout.IntSlider(springsPerRiver, 0, 20, new GUIContent("Springs Per River"));
