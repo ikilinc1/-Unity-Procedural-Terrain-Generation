@@ -109,6 +109,7 @@ public class CustomTerrainEditor : Editor
         distanceDetail = serializedObject.FindProperty("distanceDetail");
         waterHeight = serializedObject.FindProperty("waterHeight");
         waterGO = serializedObject.FindProperty("waterGO");
+        shoreLineMaterial = serializedObject.FindProperty("shoreLineMaterial");
         erosionType = serializedObject.FindProperty("erosionType");
         erosionStrength = serializedObject.FindProperty("erosionStrength");
         springsPerRiver = serializedObject.FindProperty("springsPerRiver");
