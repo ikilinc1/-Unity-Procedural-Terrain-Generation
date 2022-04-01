@@ -457,7 +457,7 @@ MonoBehaviour:
   MPDMaxHeight: 2
   MPDDampening: 2
   MPDRoughness: 2
-  smoothIteration: 8
+  smoothIteration: 2
   splatHeights:
   - texture: {fileID: 2800000, guid: 69930cb68b9e44a93877a4fd343b0e89, type: 3}
     minHeight: 0
@@ -536,13 +536,13 @@ MonoBehaviour:
   waterHeight: 0.01
   waterGO: {fileID: 100000, guid: 780611a67e8e941a2b3aa96e5915a793, type: 3}
   shoreLineMaterial: {fileID: 2100000, guid: fadcd5b0c39301a458979447e58d0553, type: 2}
-  erosionType: 3
-  erosionStrength: 0.326
+  erosionType: 4
+  erosionStrength: 0.574
   erosionAmount: 0.001
   springsPerRiver: 3
   solubility: 0.005
   droplets: 175
-  erosionSmoothAmount: 1
+  erosionSmoothAmount: 2
   terrainLayer: 9
 --- !u!154 &1390164012
 TerrainCollider:
