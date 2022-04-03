@@ -448,8 +448,8 @@ MonoBehaviour:
   voronoiFalloff: 7.36
   voronoiDropoff: 6.6
   voronoiMinHeight: 0.037
-  voronoiMaxHeight: 0.253
-  voronoiPeaks: 3
+  voronoiMaxHeight: 0.587
+  voronoiPeaks: 10
   voronoiType: 3
   terrain: {fileID: 1390164013}
   terrainData: {fileID: 15600000, guid: 214f5190294a3d24a8fefee29e1ca1ba, type: 2}
@@ -536,7 +536,7 @@ MonoBehaviour:
   waterHeight: 0.01
   waterGO: {fileID: 100000, guid: 780611a67e8e941a2b3aa96e5915a793, type: 3}
   shoreLineMaterial: {fileID: 2100000, guid: fadcd5b0c39301a458979447e58d0553, type: 2}
-  erosionType: 4
+  erosionType: 5
   erosionStrength: 0.574
   erosionAmount: 0.001
   springsPerRiver: 3
