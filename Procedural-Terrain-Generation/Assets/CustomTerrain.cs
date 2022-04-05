@@ -165,6 +165,19 @@ public class CustomTerrain : MonoBehaviour
     public float solubility = 0.01f;
     public int droplets = 10;
     public int erosionSmoothAmount = 5;
+    
+    // Clouds
+    public int numClouds = 1;
+    public int particlesPerCloud = 50;
+    public Vector3 cloudScale = new Vector3(1, 1, 1);
+    public Material cloudMaterial;
+    public Material cloudShadowMaterial;
+    public float cloudStartSize = 5;
+    public Color cloudColor = Color.white;
+    public Color cloudLining = Color.grey;
+    public float cloudMinSpeed = 0.2f;
+    public float cloudMaxSpeed = 0.5f;
+    public float cloudRange = 500.0f;
 
     public void MidpointDisplacement()
     {
@@ -1027,6 +1040,37 @@ public class CustomTerrain : MonoBehaviour
         CanyonCrawler(x - 1,y + 1, height + UnityEngine.Random.Range(slope, slope + 0.01f), slope, maxDepth);
         CanyonCrawler(x,y - 1, height + UnityEngine.Random.Range(slope, slope + 0.01f), slope, maxDepth);
         CanyonCrawler(x,y + 1, height + UnityEngine.Random.Range(slope, slope + 0.01f), slope, maxDepth);
+    }
+
+    public void GenerateClouds()
+    {
+        GameObject cloudManager = GameObject.Find("CloudManager");
+        if (!cloudManager)
+        {
+            cloudManager = new GameObject();
+            cloudManager.name = "CloudManager";
+            cloudManager.AddComponent<CloudManager>();
+            cloudManager.transform.position = this.transform.position;
+        }
+
+        GameObject[] allClouds = GameObject.FindGameObjectsWithTag("Cloud");
+        for (int i = 0; i < allClouds.Length; i++)
+        {
+            DestroyImmediate(allClouds[i]);
+        }
+
+        for (int c = 0; c < numClouds; c++)
+        {
+            GameObject cloudGO = new GameObject();
+            cloudGO.name = "Cloud" + c;
+            cloudGO.tag = "Cloud";
+
+            cloudGO.transform.rotation = cloudManager.transform.rotation;
+            cloudGO.transform.position = cloudManager.transform.position;
+
+            cloudGO.transform.parent = cloudManager.transform;
+            cloudGO.transform.localScale = new Vector3(1, 1, 1);
+        }
     }
 
     public void Smooth()
