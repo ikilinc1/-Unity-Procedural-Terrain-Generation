@@ -53,7 +53,8 @@ public class CustomTerrainEditor : Editor
     private SerializedProperty erosionAmount;
     private SerializedProperty numClouds;
     private SerializedProperty particlesPerCloud;
-    private SerializedProperty cloudScale;
+    private SerializedProperty cloudMinScale;
+    private SerializedProperty cloudMaxScale;
     private SerializedProperty cloudMaterial;
     private SerializedProperty cloudShadowMaterial;
     private SerializedProperty cloudStartSize;
@@ -139,7 +140,8 @@ public class CustomTerrainEditor : Editor
         details = serializedObject.FindProperty("details");
         numClouds = serializedObject.FindProperty("numClouds");
         particlesPerCloud = serializedObject.FindProperty("particlesPerCloud");
-        cloudScale = serializedObject.FindProperty("cloudScale");
+        cloudMinScale = serializedObject.FindProperty("cloudMinScale");
+        cloudMaxScale = serializedObject.FindProperty("cloudMaxScale");
         cloudMaterial = serializedObject.FindProperty("cloudMaterial");
         cloudShadowMaterial = serializedObject.FindProperty("cloudShadowMaterial");
         cloudStartSize = serializedObject.FindProperty("cloudStartSize");
@@ -391,7 +393,8 @@ public class CustomTerrainEditor : Editor
             EditorGUILayout.PropertyField(numClouds, new GUIContent("Number of Clouds"));
             EditorGUILayout.PropertyField(particlesPerCloud, new GUIContent("Particles Per Cloud"));
             EditorGUILayout.PropertyField(cloudStartSize, new GUIContent("Cloud Particle Size"));
-            EditorGUILayout.PropertyField(cloudScale, new GUIContent("Size"));
+            EditorGUILayout.PropertyField(cloudMinScale, new GUIContent("Min Size"));
+            EditorGUILayout.PropertyField(cloudMaxScale, new GUIContent("Max Size"));
             EditorGUILayout.PropertyField(cloudMaterial, true);
             EditorGUILayout.PropertyField(cloudShadowMaterial, true);
             EditorGUILayout.PropertyField(cloudColor, new GUIContent("Color"));
