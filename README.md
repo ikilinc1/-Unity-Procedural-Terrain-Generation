@@ -6,3 +6,4 @@ FPS Controller from https://assetstore.unity.com/packages/tools/input-management
 Skybox Milkyway from https://assetstore.unity.com/packages/2d/textures-materials/milky-way-skybox-94001  
 Editor GUI Table(lite version)  
 unity standart assets and effects 2018.1.9  
+unity post proccessing stack  
