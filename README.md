@@ -2,7 +2,7 @@
 Created a procedural terrain generation scrip by using different algorithms such as voronoi, Midpoint Displacement etc...  
 Also created a height map texture2d creator window  
 Created customizable cloud manager and skybox to create realistic skies  
-Added customizable vegetation and detail placement (Slope values, noise spread, and mny other options)  
+Added customizable vegetation and detail placement (Slope values, noise spread, and many other options)  
 Most of the customizations also valid for texture placement for terrain  
 Works with 512x512 scale terrain object 
 
